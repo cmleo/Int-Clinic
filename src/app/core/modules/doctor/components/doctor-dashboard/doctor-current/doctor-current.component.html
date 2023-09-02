@@ -23,9 +23,9 @@
         <b> {{ appointment.clinic.name }} </b> - {{ appointment.clinic.address }}
       </p>
       <p><b>Serviciul: </b> {{ appointment.service.name }}</p>
-      <p><b> Preț:</b> {{ appointment.service.price }}</p>
+      <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
       <p>
-        <b> Fișiere Atașate:</b
+        <b> Fișiere Atașate: </b
         ><a href="{{ appointment.extraDetails.file.url }}">{{ appointment.extraDetails.file.name }}</a>
       </p>
     </mat-card-content>
