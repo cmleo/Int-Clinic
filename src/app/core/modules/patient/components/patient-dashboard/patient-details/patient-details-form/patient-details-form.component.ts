@@ -42,7 +42,7 @@ export class PatientDetailsFormComponent implements OnInit {
 
   onSubmit() {
     const patient = this.patientForm.getRawValue();
-    const name = `${patient.firstName} ${patient.lastName}`;
+    const name = `${patient.lastName} ${patient.firstName}`;
     let id = '';
     if (this.patientData.uid != undefined) {
       id = this.patientData.uid;
@@ -67,8 +67,8 @@ export class PatientDetailsFormComponent implements OnInit {
       }
 
       this.patientForm.patchValue({
-        firstName: this.patientData?.displayName?.split(' ')[0],
-        lastName: this.patientData?.displayName?.split(' ')[1],
+        firstName: this.patientData?.displayName?.split(' ')[1],
+        lastName: this.patientData?.displayName?.split(' ')[0],
         phone: this.patientData?.phone,
         imageUrl: '',
       });
