@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Patient } from 'src/app/core/interfaces/patient.interface';
-import { AppointmentService } from 'src/app/core/services/appointment.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ConfirmationDialogService } from 'src/app/core/services/confirmation-dialog.service';
 import { ImageUploadService } from 'src/app/core/services/image-upload.service';
+import { PatientService } from 'src/app/core/services/patient.service';
 
 @Component({
   selector: 'app-patient-details-form',
@@ -23,7 +23,7 @@ export class PatientDetailsFormComponent implements OnInit {
     private router: Router,
     private dialogService: ConfirmationDialogService,
     private imageUploadService: ImageUploadService,
-    private appointmentService: AppointmentService
+    private patientService: PatientService
   ) {}
 
   patientForm = new FormGroup({
@@ -52,7 +52,7 @@ export class PatientDetailsFormComponent implements OnInit {
     this.patientData.phone = patient.phone as string;
     this.patientData.imageUrl = this.imageUrl;
 
-    this.appointmentService.updatePatient(this.patientData, id);
+    this.patientService.updatePatient(id, this.patientData);
     this.router.navigate(['/patient/dashboard/details']);
   }
 

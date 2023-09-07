@@ -24,7 +24,7 @@ export class DoctorHistoryComponent {
   ) {
     this.authService.user$.subscribe(data => {
       if (data !== null && data.uid !== undefined) {
-        this.appointmentService.dashboardQueryDoctor(data.uid).subscribe(data => {
+        this.appointmentService.queryAppointmentsByDoctor(data.uid).subscribe(data => {
           this.doctorAppointments = data as [];
           this.doctorAppointments.sort((a: any, b: any) => {
             const timeA = a.timeSlot.split(':')[0];

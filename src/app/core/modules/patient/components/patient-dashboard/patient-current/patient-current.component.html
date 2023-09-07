@@ -1,18 +1,27 @@
 <div class="cards">
   <h3>Programările tale:</h3>
-  <mat-card *ngFor="let appointment of appointmentsText" class="example-card">
-    <mat-card-header>
-      <mat-card-title>Serviciul: {{ appointment.service.name }} </mat-card-title>
-      <mat-card-subtitle>Data: {{ appointment.date }}, {{ appointment.timeSlot }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="card-container">
-      <p><b> Doctor:</b> {{ appointment.doctor.firstName }} {{ appointment.doctor.lastName }}</p>
-      <p>
-        <b> {{ appointment.clinic.name }} </b> - {{ appointment.clinic.address }}
-      </p>
-      <p><b>Număr telefon: </b> {{ appointment.clinic.phone }}</p>
-      <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
-      <p><b> Fișiere Atașate: </b> {{ appointment.extraDetails.file.name }}</p>
-    </mat-card-content>
-  </mat-card>
+  <ng-container *ngIf="appointmentsText.length > 0; else noAppointments">
+    <mat-card *ngFor="let appointment of appointmentsText" class="example-card">
+      <mat-card-header>
+        <mat-card-title>Serviciul: {{ appointment.service.name }} </mat-card-title>
+        <mat-card-subtitle>Data: {{ appointment.date }}, {{ appointment.timeSlot }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-container">
+        <p><b> Doctor:</b> {{ appointment.doctor.firstName }} {{ appointment.doctor.lastName }}</p>
+        <p>
+          <b> {{ appointment.clinic.name }} </b> - {{ appointment.clinic.address }}
+        </p>
+        <p><b>Număr telefon: </b> {{ appointment.clinic.phone }}</p>
+        <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
+        <p><b> Fișiere Atașate: </b> {{ appointment.extraDetails.file.name }}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <ng-template #noAppointments>
+    <h4>
+      Nu ai nicio programare curentă. <br />
+      Apasă pe butonul <span style="color: green">"Programare Nouă" </span> din partea dreaptă pentru a crea una.
+    </h4>
+  </ng-template>
 </div>

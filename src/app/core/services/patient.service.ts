@@ -14,17 +14,13 @@ export class PatientService {
     return from(getDoc(selectedClinic));
   }
 
-  updatePatient(id: string | undefined, data: object) {
+  updatePatient(id: string | undefined, patientData: object) {
     if (id) {
-      const docInstance = doc(this.firestore, 'patients', id);
+      const patientInstance = doc(this.firestore, 'patients', id);
 
-      updateDoc(docInstance, data)
-        .then(() => {
-          console.log('Data Changed');
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      updateDoc(patientInstance, patientData).catch(err => {
+        console.error(err);
+      });
     }
   }
 }

@@ -12,7 +12,11 @@
       </p>
       <p><b>Număr telefon: </b> {{ appointment.clinic.phone }}</p>
       <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
-      <p><b> Fișiere Atașate: </b> {{ appointment.extraDetails.file.name }}</p>
+      <p>
+        <b> Fișiere Atașate: </b
+        ><a href="{{ appointment.extraDetails.file.url }}">{{ appointment.extraDetails.file.name }}</a>
+      </p>
     </mat-card-content>
   </mat-card>
+  <h4 *ngIf="appointmentsText.length === 0">Nu a fost gasită nicio programare. <br /></h4>
 </div>

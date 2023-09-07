@@ -12,7 +12,7 @@ import { SpecialtiesService } from 'src/app/core/services/specialties.service';
   styleUrls: ['./patient-history.component.scss'],
 })
 export class PatientHistoryComponent {
-  clientAppointments!: any;
+  patientAppointments!: any;
   appointmentsText: any = [];
   todayDate: Date = new Date();
 
@@ -26,15 +26,15 @@ export class PatientHistoryComponent {
   ) {
     this.authUser.user$.subscribe(data => {
       if (data !== null && data.uid !== undefined) {
-        this.appointmentQuery.dashboardQueryPatient(data.uid).subscribe(data => {
-          this.clientAppointments = data as [];
-          this.clientAppointments.sort((a: any, b: any) => {
+        this.appointmentQuery.queryAppointmentsByPatient(data.uid).subscribe(data => {
+          this.patientAppointments = data as [];
+          this.patientAppointments.sort((a: any, b: any) => {
             const timeA = a.timeSlot.split(':')[0];
             const timeB = b.timeSlot.split(':')[0];
             return b.date - a.date || timeA - timeB;
           });
           this.todayDate.setHours(0, 0, 0, 0);
-          this.clientAppointments.forEach(
+          this.patientAppointments.forEach(
             (appointment: {
               date: any;
               localDate: string;
