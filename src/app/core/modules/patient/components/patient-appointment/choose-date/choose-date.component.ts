@@ -54,7 +54,6 @@ export class ChooseDateComponent implements OnInit {
 
   onAddDate() {
     this.timeSelected = '';
-    console.log(this.selected);
     this.dateSelected = this.selected
       ?.toString()
       .slice(4)

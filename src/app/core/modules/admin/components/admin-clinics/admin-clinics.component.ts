@@ -72,7 +72,7 @@ export class AdminClinicsComponent implements OnInit {
   confirmDeleteDialog(id: string, name: string) {
     const options = {
       title: 'Stergere Clinică',
-      message: `Ești sigur că vrei să ștergi clinica ${name}?`,
+      message: `Ești sigur că vrei să ștergi clinica "${name}"?`,
       cancelText: 'Nu',
       confirmText: 'Da',
     };

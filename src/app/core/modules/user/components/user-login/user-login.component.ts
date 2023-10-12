@@ -45,7 +45,7 @@ export class UserLoginComponent {
               this.router.navigate(['doctor/dashboard/current']);
             }
             if (role === 'admin') {
-              this.router.navigate(['admin']);
+              this.router.navigate(['admin/clinics']);
             }
           });
         });

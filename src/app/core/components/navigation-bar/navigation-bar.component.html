@@ -32,14 +32,17 @@
     <div class="user-profile" *ngIf="loggedUser">
       <span class="username"></span>
       <button mat-button [matMenuTriggerFor]="menu2">
-        Bine ai venit,
+        Bine ai venit, <span *ngIf="isDoctor">Dr.</span>
         {{ loggedUser.displayName }}
         <mat-icon class="login-icon">account_circle </mat-icon>
       </button>
 
       <mat-menu #menu2="matMenu">
         <a
-          [routerLink]="isPatient ? 'patient/dashboard/current' : isDoctor ? 'doctor/dashboard/current' : 'admin'"
+          *ngIf="!isAdmin"
+          [routerLink]="
+            isPatient ? 'patient/dashboard/current' : isDoctor ? 'doctor/dashboard/current' : 'admin/clinics'
+          "
           mat-menu-item>
           <mat-icon class="login-icon">account_circle </mat-icon>
           Contul meu

@@ -77,7 +77,7 @@ export class AdminSpecialtiesComponent {
   confirmDeleteDialog(id: string, name: string) {
     const options = {
       title: 'Ștergere specializare',
-      message: `Ești sigur că vrei să ștergi specializarea ${name}?`,
+      message: `Ești sigur că vrei să ștergi specializarea "${name}"?`,
       cancelText: 'Nu',
       confirmText: 'Da',
     };
