@@ -42,7 +42,7 @@ export class AppointmentService {
     const appointmentsRef = collection(this.dataBase, 'appointments');
 
     const q = query(appointmentsRef, where('patient.uid', '==', `${patientId}`));
-    return collectionData(q);
+    return collectionData(q, { idField: 'id' });
   }
 
   queryAppointmentsByDoctor(doctorId: string) {
@@ -71,5 +71,12 @@ export class AppointmentService {
     });
 
     await Promise.all(deletePromises);
+  }
+
+  deleteAppointment(id: string) {
+    const docInstance = doc(this.dataBase, 'appointments', id);
+    deleteDoc(docInstance).then(() => {
+      console.log('Appointment deleted');
+    });
   }
 }

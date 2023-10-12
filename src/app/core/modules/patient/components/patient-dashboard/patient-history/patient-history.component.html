@@ -18,6 +18,9 @@
         <b> Fișiere Atașate: </b
         ><a href="{{ appointment.extraDetails.file.url }}">{{ appointment.extraDetails.file.name }}</a>
       </p>
+      <button mat-raised-button color="warn" (click)="confirmDeleteAppointmentDialog(appointment.id)" id="deleteBtn">
+        Șterge
+      </button>
     </mat-card-content>
   </mat-card>
   <h4 *ngIf="appointmentsText.length === 0">Nu a fost gasită nicio programare. <br /></h4>
