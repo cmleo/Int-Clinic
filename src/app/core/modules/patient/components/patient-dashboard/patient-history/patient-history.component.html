@@ -1,5 +1,7 @@
 <div class="cards">
   <h3>Programările tale:</h3>
+  <button mat-raised-button color="warn" (click)="confirmDeleteHistoryDialog()">Șterge Istoric</button>
+  <br />
   <mat-card *ngFor="let appointment of appointmentsText" class="example-card">
     <mat-card-header>
       <mat-card-title>Serviciul: {{ appointment.service.name }} </mat-card-title>
