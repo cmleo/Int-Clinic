@@ -53,20 +53,35 @@ export class UserSignUpComponent {
         this.signUpForm.reset();
       })
       .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          this.error.message = 'Adresă de email deja înregistrată în baza noastra de date. Te rog încearcă cu alta.';
-        } else if (error.code === 'auth/invalid-email') {
-          this.error.message = 'Adresă de email invalidă.';
-        } else if (error.code === 'auth/weak-password') {
-          this.error.message = 'Parolă prea scurtă. Parola trebuie să aibă minim 6 caractere.';
-        } else if (error.code === 'auth/invalid-photo-url') {
-          this.error.message = 'URL-ul pozei este invalid. Încearcă alta te rog.';
-        } else if (error.code === 'auth/invalid-phone-number') {
-          this.error.message = 'Numarul de telefon intrudus este invalid. Formatul trebuie sa fie 07xx xxx xxx';
-        } else if (error.code === 'auth/phone-number-already-exists') {
-          this.error.message = 'Numărul de telefon este deja înregistrat. Te rog încearcă cu altul.';
-        } else {
-          this.error.message = 'Eroare internă, te rog sa încerci mai târziu';
+        switch (error.code) {
+          case 'auth/email-already-in-use': {
+            this.error.message = 'Adresă de email deja înregistrată în baza noastra de date. Te rog încearcă cu alta.';
+            break;
+          }
+          case 'auth/invalid-email': {
+            this.error.message = 'Adresă de email invalidă.';
+            break;
+          }
+          case 'auth/weak-password': {
+            this.error.message = 'Parolă prea scurtă. Parola trebuie să aibă minim 6 caractere.';
+            break;
+          }
+          case 'auth/invalid-photo-url': {
+            this.error.message = 'URL-ul pozei este invalid. Încearcă alta te rog.';
+            break;
+          }
+          case 'auth/invalid-phone-number': {
+            this.error.message = 'Numarul de telefon intrudus este invalid. Formatul trebuie sa fie 07xx xxx xxx';
+            break;
+          }
+          case 'auth/phone-number-already-exists': {
+            this.error.message = 'Numărul de telefon este deja înregistrat. Te rog încearcă cu altul.';
+            break;
+          }
+          default: {
+            this.error.message = 'Eroare internă, te rog sa încerci mai târziu';
+            break;
+          }
         }
       });
   }
@@ -77,7 +92,7 @@ export class UserSignUpComponent {
       return;
     }
 
-    this.imageUploadService.uploadImage(file, 'doctors').subscribe(downloadURL => {
+    this.imageUploadService.uploadImage(file, 'patients').subscribe(downloadURL => {
       this.patientImage = downloadURL;
     });
   }
