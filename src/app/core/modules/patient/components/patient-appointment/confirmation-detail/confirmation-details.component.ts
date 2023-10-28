@@ -47,6 +47,8 @@ export class ConfirmationDetailComponent {
           month: 'short',
           year: 'numeric',
         }),
+        archivedByDoctor: false,
+        archivedByPatient: false,
       };
       this.appointmentService.addAppointment(appointmentConfirmed);
     }
