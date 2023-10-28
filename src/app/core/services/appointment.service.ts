@@ -4,10 +4,9 @@ import {
   addDoc,
   collection,
   collectionData,
-  deleteDoc,
   doc,
-  getDocs,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
@@ -30,12 +29,12 @@ export class AppointmentService {
     return collectionData(appointmentsCollection, { idField: 'id' });
   }
 
-  queryAppointments(doctorID: string, localDate: string | undefined) {
+  queryAppointmentsByDate(doctorID: string, localDate: string | undefined) {
     const appointmentsRef = collection(this.dataBase, 'appointments');
 
     const q = query(appointmentsRef, where('doctorId', '==', `${doctorID}`), where('localDate', '==', `${localDate}`));
 
-    return collectionData(q);
+    return collectionData(q, { idField: 'id' });
   }
 
   queryAppointmentsByPatient(patientId: string) {
@@ -52,31 +51,37 @@ export class AppointmentService {
     return collectionData(q);
   }
 
-  async deleteAllAppointments(patientId: string | undefined) {
-    if (!patientId) {
-      throw new Error('Patient ID is required.');
-    }
-
+  getAppointmentsArchivedByDoctor(doctorId: string, archivedByDoctor: boolean) {
     const appointmentsRef = collection(this.dataBase, 'appointments');
 
-    const q = query(appointmentsRef, where('patient.uid', '==', patientId));
-    const querySnapshot = await getDocs(q);
-
-    const deletePromises: Promise<void>[] = [];
-    querySnapshot.forEach(data => {
-      const appointmentId = data.id;
-      const appointmentDocRef = doc(appointmentsRef, appointmentId);
-      const deletePromise = deleteDoc(appointmentDocRef);
-      deletePromises.push(deletePromise);
-    });
-
-    await Promise.all(deletePromises);
+    const q = query(
+      appointmentsRef,
+      where('doctorId', '==', `${doctorId}`),
+      where('archivedByDoctor', '==', archivedByDoctor)
+    );
+    return collectionData(q, { idField: 'id' });
   }
 
-  deleteAppointment(id: string) {
+  getAppointmentsArchivedByPatient(patientId: string, archivedByPatient: boolean) {
+    const appointmentsRef = collection(this.dataBase, 'appointments');
+
+    const q = query(
+      appointmentsRef,
+      where('patient.uid', '==', `${patientId}`),
+      where('archivedByPatient', '==', archivedByPatient)
+    );
+    return collectionData(q, { idField: 'id' });
+  }
+
+  archiveDoctorAppointment(id: string) {
     const docInstance = doc(this.dataBase, 'appointments', id);
-    deleteDoc(docInstance).then(() => {
-      console.log('Appointment deleted');
-    });
+
+    return updateDoc(docInstance, { archivedByDoctor: true });
+  }
+
+  archivePatientAppointment(id: string) {
+    const docInstance = doc(this.dataBase, 'appointments', id);
+
+    return updateDoc(docInstance, { archivedByPatient: true });
   }
 }
