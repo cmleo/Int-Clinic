@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppointmentService } from 'src/app/core/services/appointment.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ClinicService } from 'src/app/core/services/clinic.service';
@@ -17,7 +16,6 @@ export class PatientHistoryComponent {
   patientAppointments!: any;
   appointmentsText: any = [];
   todayDate: Date = new Date();
-  patientId!: string | undefined;
 
   constructor(
     private appointmentQuery: AppointmentService,
@@ -27,14 +25,13 @@ export class PatientHistoryComponent {
     private serviceService: ServicesService,
     private doctorService: DoctorService,
     private dialogService: ConfirmationDialogService,
-    private appointmentsService: AppointmentService,
-    private router: Router
+    private appointmentsService: AppointmentService
   ) {
     this.authService.user$.subscribe(userData => {
-      this.patientId = userData?.uid;
       if (userData !== null && userData.uid !== undefined) {
-        this.appointmentQuery.queryAppointmentsByPatient(userData.uid).subscribe(appointmentData => {
+        this.appointmentQuery.getAppointmentsArchivedByPatient(userData.uid, false).subscribe(appointmentData => {
           this.patientAppointments = appointmentData as [];
+          this.appointmentsText = [];
           this.patientAppointments.sort((a: any, b: any) => {
             const timeA = a.timeSlot.split(':')[0];
             const timeB = b.timeSlot.split(':')[0];
@@ -52,6 +49,7 @@ export class PatientHistoryComponent {
               doctorId: string;
               timeSlot: string;
               extraDetails: object;
+              archivedByPatient: boolean;
             }) => {
               const appointmentDate = appointment.date.toDate();
               if (appointmentDate < this.todayDate) {
@@ -65,18 +63,21 @@ export class PatientHistoryComponent {
                   specialty: {},
                   timeSlot: '',
                   extraDetails: {},
+                  archivedByPatient: false,
                 };
-                data.id = appointment.id;
                 this.clinicService.getClinic(appointment.clinicId).subscribe(res => (data.clinic = res['data']()));
                 this.specialtyService
                   .getSpecialty(appointment.specialtyId)
                   .subscribe(res => (data.specialty = res['data']()));
                 this.serviceService.getService(appointment.serviceId).subscribe(res => (data.service = res['data']()));
                 this.doctorService.getDoctor(appointment.doctorId).subscribe(res => (data.doctor = res['data']()));
+
+                data.id = appointment.id;
                 data.date = appointment.date.toDate().toString().split(' ').slice(0, 4).join(' ') as Date;
                 data.timeSlot = appointment.timeSlot;
                 data.extraDetails = appointment.extraDetails;
                 data.localDate = appointment.localDate;
+                data.archivedByPatient = appointment.archivedByPatient;
 
                 this.appointmentsText.push(data);
               }
@@ -87,7 +88,7 @@ export class PatientHistoryComponent {
     });
   }
 
-  confirmDeleteHistoryDialog() {
+  confirmDeleteHistory() {
     const options = {
       title: 'Ștergere Istoric',
       message: `Ești sigur că vrei să ștergi istoricul programărilor ?`,
@@ -99,13 +100,20 @@ export class PatientHistoryComponent {
 
     this.dialogService.confirmed().subscribe(confirmed => {
       if (confirmed) {
-        this.appointmentsService.deleteAllAppointments(this.patientId);
-        location.reload();
+        Promise.allSettled(
+          this.appointmentsText.map((appointment: any) =>
+            this.appointmentsService.archivePatientAppointment(appointment.id)
+          )
+        ).then(() => {
+          this.appointmentsText = this.appointmentsText.filter(
+            (appointment: { archivedByPatient: boolean }) => appointment.archivedByPatient == false
+          );
+        });
       }
     });
   }
 
-  confirmDeleteAppointmentDialog(appointmentId: string) {
+  confirmDeleteAppointment(appointmentId: string) {
     if (!appointmentId) {
       console.log('Appointment id not found');
       return;
@@ -122,8 +130,11 @@ export class PatientHistoryComponent {
 
     this.dialogService.confirmed().subscribe(confirmed => {
       if (confirmed) {
-        this.appointmentsService.deleteAppointment(appointmentId);
-        location.reload();
+        this.appointmentsService.archivePatientAppointment(appointmentId).then(() => {
+          this.appointmentsText = this.appointmentsText.filter(
+            (appointment: { archivedByPatient: boolean }) => appointment.archivedByPatient == false
+          );
+        });
       }
     });
   }
