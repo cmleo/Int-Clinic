@@ -80,7 +80,7 @@ export class DoctorCurrentComponent implements OnInit {
   getAppointmentsByDate(date: string | undefined) {
     this.appointments = [];
     this.appointmentService
-      .queryAppointments(this.doctorId, date)
+      .queryAppointmentsByDate(this.doctorId, date)
       .pipe(
         switchMap(appointmentData => {
           this.appointments = appointmentData as AppointmentIds[];

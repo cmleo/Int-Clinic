@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <mat-form-field class="example-full-width">
-      <mat-label>Introduce Emailul</mat-label>
+      <mat-label>Email</mat-label>
       <input type="email" matInput placeholder="nume@mail.com" required formControlName="email" />
       <mat-icon matSuffix>alternate_email</mat-icon>
       <mat-error *ngIf="doctorForm.get('email')?.hasError('pattern')">Email Invalid</mat-error>
@@ -34,8 +34,8 @@
     </mat-radio-group>
 
     <div class="submit">
-      <button mat-stroked-button color="primary" type="submit">Confirmă</button>
       <button mat-button color="primary" (click)="closeDialog()">Închide</button>
+      <button mat-stroked-button color="primary" type="submit">Confirmă</button>
     </div>
   </form>
 </div>

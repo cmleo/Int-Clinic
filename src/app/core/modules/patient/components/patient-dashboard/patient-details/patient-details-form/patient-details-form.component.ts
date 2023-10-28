@@ -117,7 +117,7 @@ export class PatientDetailsFormComponent implements OnInit {
       return;
     }
 
-    this.imageUploadService.uploadImage(file, 'clinics').subscribe(downloadURL => {
+    this.imageUploadService.uploadImage(file, 'patients').subscribe(downloadURL => {
       this.imageUrl = downloadURL;
     });
   }
