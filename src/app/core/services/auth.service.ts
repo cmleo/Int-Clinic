@@ -8,7 +8,7 @@ import { Doctor } from '../interfaces/doctor.interface';
 import { Admin } from '../interfaces/admin.interface';
 import { Patient } from '../interfaces/patient.interface';
 import { Router } from '@angular/router';
-import { initializeApp, deleteApp } from '@angular/fire/app';
+import { initializeApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -149,7 +149,7 @@ export class AuthService {
         if (!result.user) {
           return;
         }
-        const userRef: AngularFirestoreDocument<any> = this.afs.doc(`patients/${result.user.uid}`);
+        const userRef: AngularFirestoreDocument<DocumentData> = this.afs.doc(`patients/${result.user.uid}`);
 
         const patientData = {
           uid: result.user.uid,

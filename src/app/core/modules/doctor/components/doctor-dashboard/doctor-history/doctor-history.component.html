@@ -1,5 +1,9 @@
 <div class="cards">
   <h3>Programările tale:</h3>
+  <button mat-raised-button color="warn" (click)="confirmArchiveHistory()" *ngIf="appointmentsText.length > 0">
+    Arhivează Istoric
+  </button>
+  <br />
   <ng-container *ngIf="appointmentsText.length > 0; else noAppointments">
     <mat-card *ngFor="let appointment of appointmentsText" class="example-card">
       <mat-card-header>

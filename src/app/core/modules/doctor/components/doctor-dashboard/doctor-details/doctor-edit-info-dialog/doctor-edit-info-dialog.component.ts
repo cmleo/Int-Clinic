@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Doctor } from 'src/app/core/interfaces/doctor.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DoctorService } from 'src/app/core/services/doctor.service';
@@ -21,7 +22,8 @@ export class DoctorEditInfoDialogComponent {
     public dialogRef: MatDialogRef<DoctorEditInfoDialogComponent>,
     private authService: AuthService,
     private doctorService: DoctorService,
-    private imageUploadService: ImageUploadService
+    private imageUploadService: ImageUploadService,
+    private router: Router
   ) {
     this.authService.user$.subscribe(data => {
       this.doctor = data;
@@ -69,6 +71,7 @@ export class DoctorEditInfoDialogComponent {
       this.doctorService.updateDoctor(this.doctor.uid, doctorData);
       this.doctorService.updateImage(this.doctor.uid, this.doctorImage);
       this.close(true);
+      this.router.navigate(['/doctor/dashboard/details']);
     }
     if (event) {
       this.uploadImage(event);

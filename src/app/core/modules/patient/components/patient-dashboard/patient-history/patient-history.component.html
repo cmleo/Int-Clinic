@@ -1,5 +1,9 @@
 <div class="cards">
   <h3>Programările tale:</h3>
+  <button mat-raised-button color="warn" (click)="confirmDeleteHistory()" *ngIf="appointmentsText.length > 0">
+    Șterge Istoric
+  </button>
+  <br />
   <mat-card *ngFor="let appointment of appointmentsText" class="example-card">
     <mat-card-header>
       <mat-card-title>Serviciul: {{ appointment.service.name }} </mat-card-title>
@@ -16,6 +20,7 @@
         <b> Fișiere Atașate: </b
         ><a href="{{ appointment.extraDetails.file.url }}">{{ appointment.extraDetails.file.name }}</a>
       </p>
+      <button mat-raised-button color="warn" (click)="confirmDeleteAppointment(appointment.id)">Șterge</button>
     </mat-card-content>
   </mat-card>
   <h4 *ngIf="appointmentsText.length === 0">Nu a fost gasită nicio programare. <br /></h4>

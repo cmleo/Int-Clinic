@@ -10,4 +10,6 @@ export interface AppointmentIds {
   timeSlot: string;
   extraDetails: object;
   localDate?: string;
+  archivedByDoctor?: boolean;
+  archivedByPatient?: boolean;
 }
