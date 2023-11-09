@@ -12,4 +12,6 @@ export interface AppointmentIds {
   localDate?: string;
   archivedByDoctor?: boolean;
   archivedByPatient?: boolean;
+  status: string;
+  id?: string;
 }
