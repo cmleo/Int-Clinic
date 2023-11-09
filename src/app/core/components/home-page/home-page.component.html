@@ -10,15 +10,29 @@
       cu compasiunea pentru a asigura sănătatea și binele pacienților lor.
     </p>
 
-    <div *ngIf="!loggedUser || isPatient" class="btns">
+    <div class="btns">
       <div>
-        <button id="firstBtn" mat-flat-button color="primary" (click)="onClickGetAppoinment()">
+        <h3 *ngIf="!loggedUser">Ești Pacient ?</h3>
+        <button
+          *ngIf="!loggedUser || isPatient"
+          id="firstBtn"
+          mat-flat-button
+          color="primary"
+          (click)="onClickGetAppoinment()">
           Fă-ți o programare | +
         </button>
       </div>
 
-      <div *ngIf="!loggedUser || isDoctor">
-        <button id="secondBtn" mat-flat-button color="warn" (click)="onClickManageSite()">Intră in cont</button>
+      <div>
+        <h3 *ngIf="!loggedUser">Ești Doctor ?</h3>
+        <button
+          *ngIf="!loggedUser || isDoctor"
+          id="secondBtn"
+          mat-flat-button
+          color="warn"
+          (click)="onClickManageSite()">
+          Gestionează Programările
+        </button>
       </div>
     </div>
   </section>

@@ -35,6 +35,6 @@ export class HomePageComponent implements OnInit {
   }
 
   onClickManageSite(): void {
-    this.router.navigate(['doctor']);
+    this.router.navigate(['doctor/dashboard/current']);
   }
 }
