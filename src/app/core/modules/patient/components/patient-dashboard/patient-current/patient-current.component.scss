@@ -6,6 +6,16 @@
     width: auto;
     background-color: white;
     margin-bottom: 25px;
+
+    .cancelBtn {
+      float: right;
+      border: none;
+      background-color: #ff0000;
+      border-radius: 20px;
+      color: white;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
   }
 
   .status {

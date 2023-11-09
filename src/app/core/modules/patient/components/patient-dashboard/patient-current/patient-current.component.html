@@ -14,6 +14,7 @@
         </p>
         <p><b>Număr telefon: </b> {{ appointment.clinic.phone }}</p>
         <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
+        <button mat-raised-button class="cancelBtn" (click)="confirmCancelAppointment(appointment.id)">Anulează</button>
         <p><b> Fișiere Atașate: </b> {{ appointment.extraDetails.file.name }}</p>
       </mat-card-content>
     </mat-card>
