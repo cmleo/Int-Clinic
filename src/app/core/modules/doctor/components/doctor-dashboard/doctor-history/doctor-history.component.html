@@ -11,6 +11,7 @@
         <mat-card-subtitle>Data: {{ appointment.localDate }}, {{ appointment.timeSlot }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
+        <span class="status"> {{ appointment.status }} </span>
         <p><b> Telefon:</b> {{ appointment.patient.phone }}</p>
         <p>
           <b> {{ appointment.clinic.name }} </b> - {{ appointment.clinic.address }}

@@ -1,10 +1,19 @@
 .cards {
   display: flex;
   flex-direction: column;
-}
 
-.example-card {
-  width: auto;
-  background-color: white;
-  margin-bottom: 25px;
+  .example-card {
+    width: auto;
+    background-color: white;
+    margin-bottom: 25px;
+  }
+
+  .status {
+    color: #4bf44b;
+    float: inline-end;
+    border-radius: 50px;
+    padding: 10px 15px;
+    font-weight: bold;
+    background-color: #f3f3f3;
+  }
 }
