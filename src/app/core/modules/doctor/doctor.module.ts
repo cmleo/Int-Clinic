@@ -25,6 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DoctorEditInfoDialogComponent } from './components/doctor-dashboard/doctor-details/doctor-edit-info-dialog/doctor-edit-info-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatDialogModule,
     ReactiveFormsModule,
     MatRadioModule,
+    MatCheckboxModule,
   ],
 })
 export class DoctorModule {}

@@ -33,6 +33,7 @@ export class DoctorCurrentComponent implements OnInit {
   selected: Date | null = new Date();
   dateSelected: Date | null = null;
   localDateSelected: string | undefined;
+  selectedAppointmentIds: string[] = [];
 
   myFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
@@ -77,7 +78,7 @@ export class DoctorCurrentComponent implements OnInit {
     }
   }
 
-  getAppointmentsByDate(date: string | undefined) {
+  getAppointmentsByDate(date: string) {
     this.appointments = [];
     this.appointmentService
       .queryAppointmentsByDate(this.doctorId, date)
@@ -98,6 +99,8 @@ export class DoctorCurrentComponent implements OnInit {
                 timeSlot: appointment.timeSlot,
                 extraDetails: appointment.extraDetails,
                 patient: appointment.patient,
+                status: appointment.status,
+                id: appointment.id,
               }))
             );
           });
@@ -111,5 +114,20 @@ export class DoctorCurrentComponent implements OnInit {
           this.appointments = [];
         }
       });
+  }
+
+  toggleAppointmentSelection(appointment: any) {
+    if (this.selectedAppointmentIds.includes(appointment.id)) {
+      this.selectedAppointmentIds = this.selectedAppointmentIds.filter(id => id !== appointment.id);
+    } else {
+      this.selectedAppointmentIds.push(appointment.id);
+    }
+  }
+
+  completeAppointments() {
+    for (const appointmentId of this.selectedAppointmentIds) {
+      this.appointmentService.updateAppointmentStatus(appointmentId, 'completed');
+    }
+    this.selectedAppointmentIds = [];
   }
 }
