@@ -12,16 +12,24 @@
   </div>
   <div class="container__time">
     <h3>Ore disponibile</h3>
-    <div *ngIf="selected" class="container__time__buttons">
-      <button
-        [ngClass]="{ active: isActive(time) }"
-        (click)="onAddTime(time)"
-        class="container__time__buttons__btn"
-        *ngFor="let time of timeSlots"
-        [ngClass]="{ active: isActive(time) }"
-        mat-stroked-button>
-        {{ time }}
-      </button>
+    <div *ngIf="noTimeSlotsAvailableOrWeekend; else timeSlotsSection">
+      <p>
+        Dr. {{ doctor.displayName }} nu este disponibil in aceasta zi. Te rugam sa selectezi alta zi pentru programarea
+        ta.
+      </p>
     </div>
+
+    <ng-template #timeSlotsSection>
+      <div *ngIf="selected" class="container__time__buttons">
+        <button
+          *ngFor="let time of timeSlots"
+          [ngClass]="{ active: isActive(time) }"
+          (click)="onAddTime(time)"
+          class="container__time__buttons__btn"
+          mat-stroked-button>
+          {{ time }}
+        </button>
+      </div>
+    </ng-template>
   </div>
 </main>
