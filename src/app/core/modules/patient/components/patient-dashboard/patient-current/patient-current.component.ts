@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AppointmentService } from 'src/app/core/services/appointment.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ClinicService } from 'src/app/core/services/clinic.service';
+import { ConfirmationDialogService } from 'src/app/core/services/confirmation-dialog.service';
 import { DoctorService } from 'src/app/core/services/doctor.service';
 import { ServicesService } from 'src/app/core/services/services.service';
 import { SpecialtiesService } from 'src/app/core/services/specialties.service';
@@ -17,17 +18,19 @@ export class PatientCurrentComponent {
   todayDate: Date = new Date();
 
   constructor(
-    private appointmentQuery: AppointmentService,
+    private appointmentService: AppointmentService,
     private authUser: AuthService,
     private clinicService: ClinicService,
     private specialtyService: SpecialtiesService,
     private serviceService: ServicesService,
-    private doctorService: DoctorService
+    private doctorService: DoctorService,
+    private dialogService: ConfirmationDialogService
   ) {
     this.authUser.user$.subscribe(data => {
       if (data !== null && data.uid !== undefined) {
-        this.appointmentQuery.queryAppointmentsByPatient(data.uid).subscribe(data => {
+        this.appointmentService.queryAppointmentsByPatient(data.uid).subscribe(data => {
           this.patientAppointments = data as [];
+          this.appointmentsText = [];
           this.patientAppointments.sort((a: any, b: any) => {
             const timeA = a.timeSlot.split(':')[0];
             const timeB = b.timeSlot.split(':')[0];
@@ -36,6 +39,7 @@ export class PatientCurrentComponent {
           this.todayDate.setHours(0, 0, 0, 0);
           this.patientAppointments.forEach(
             (appointment: {
+              id: string;
               date: any;
               clinicId: string;
               specialtyId: string;
@@ -43,10 +47,12 @@ export class PatientCurrentComponent {
               doctorId: string;
               timeSlot: string;
               extraDetails: object;
+              status: string;
             }) => {
               const appointmentDate = appointment.date.toDate();
               if (appointmentDate >= this.todayDate) {
                 const data = {
+                  id: '',
                   clinic: {},
                   date: new Date(),
                   doctor: {},
@@ -54,6 +60,7 @@ export class PatientCurrentComponent {
                   specialty: {},
                   timeSlot: '',
                   extraDetails: {},
+                  status: '',
                 };
                 this.clinicService.getClinic(appointment.clinicId).subscribe(res => (data.clinic = res['data']()));
                 this.specialtyService
@@ -61,15 +68,40 @@ export class PatientCurrentComponent {
                   .subscribe(res => (data.specialty = res['data']()));
                 this.serviceService.getService(appointment.serviceId).subscribe(res => (data.service = res['data']()));
                 this.doctorService.getDoctor(appointment.doctorId).subscribe(res => (data.doctor = res['data']()));
+
+                data.id = appointment.id;
                 data.date = appointment.date.toDate().toString().split(' ').slice(0, 4).join(' ') as Date;
                 data.timeSlot = appointment.timeSlot;
                 data.extraDetails = appointment.extraDetails;
+                data.status = appointment.status;
 
                 this.appointmentsText.push(data);
               }
             }
           );
         });
+      }
+    });
+  }
+
+  confirmCancelAppointment(appointmentId: string) {
+    if (!appointmentId) {
+      console.log('Appointment id not found');
+      return;
+    }
+
+    const options = {
+      title: 'Anulare Programare',
+      message: `Ești sigur că vrei să anulezi această programare ?`,
+      cancelText: 'Nu',
+      confirmText: 'Da',
+    };
+
+    this.dialogService.open(options);
+
+    this.dialogService.confirmed().subscribe(confirmed => {
+      if (confirmed) {
+        this.appointmentService.updateAppointmentStatus(appointmentId, 'canceled');
       }
     });
   }

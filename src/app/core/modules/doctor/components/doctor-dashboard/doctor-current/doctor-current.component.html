@@ -12,23 +12,34 @@
 </div>
 <h2>Programările tale:</h2>
 <div class="cards" *ngIf="!(appointments.length === 0)">
+  <button
+    mat-raised-button
+    class="completeBtn"
+    [ngClass]="{ completeBtnDisabled: selectedAppointmentIds.length <= 0 }"
+    [disabled]="selectedAppointmentIds.length <= 0"
+    (click)="completeAppointments()">
+    Complete
+  </button>
   <mat-card *ngFor="let appointment of appointmentsText" class="example-card">
     <mat-card-header>
       <mat-card-title>Pacient: {{ appointment.patient.displayName }} </mat-card-title>
       <mat-card-subtitle>Ora: {{ appointment.timeSlot }}</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
-      <p><b> Telefon:</b> {{ appointment.patient.phone }}</p>
-      <p>
-        <b> {{ appointment.clinic.name }} </b> - {{ appointment.clinic.address }}
-      </p>
-      <p><b>Serviciul: </b> {{ appointment.service.name }}</p>
-      <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
-      <p>
-        <b> Fișiere Atașate: </b
-        ><a href="{{ appointment.extraDetails.file.url }}">{{ appointment.extraDetails.file.name }}</a>
-      </p>
-    </mat-card-content>
+    <mat-checkbox [(ngModel)]="appointment.selected" (change)="toggleAppointmentSelection(appointment)">
+      <span id="status"> {{ appointment.status }} </span>
+      <mat-card-content class="cardContent">
+        <p><b> Telefon:</b> {{ appointment.patient.phone }}</p>
+        <p>
+          <b> {{ appointment.clinic.name }} </b> - {{ appointment.clinic.address }}
+        </p>
+        <p><b>Serviciul: </b> {{ appointment.service.name }}</p>
+        <p><b> Preț:</b> {{ appointment.service.price }} RON</p>
+        <p>
+          <b> Fișiere Atașate: </b
+          ><a href="{{ appointment.extraDetails.file.url }}">{{ appointment.extraDetails.file.name }}</a>
+        </p>
+      </mat-card-content>
+    </mat-checkbox>
   </mat-card>
 </div>
 <div *ngIf="appointments.length === 0">

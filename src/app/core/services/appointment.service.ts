@@ -29,7 +29,7 @@ export class AppointmentService {
     return collectionData(appointmentsCollection, { idField: 'id' });
   }
 
-  queryAppointmentsByDate(doctorID: string, localDate: string | undefined) {
+  queryAppointmentsByDate(doctorID: string | undefined, localDate: string | undefined) {
     const appointmentsRef = collection(this.dataBase, 'appointments');
 
     const q = query(appointmentsRef, where('doctorId', '==', `${doctorID}`), where('localDate', '==', `${localDate}`));
@@ -83,5 +83,19 @@ export class AppointmentService {
     const docInstance = doc(this.dataBase, 'appointments', id);
 
     return updateDoc(docInstance, { archivedByPatient: true });
+  }
+
+  updateAppointmentStatus(id: string, status: string) {
+    try {
+      if (!id) {
+        throw new Error('No appointment ID provided');
+      }
+      const docInstance = doc(this.dataBase, 'appointments', id);
+
+      return updateDoc(docInstance, { status: status });
+    } catch (error) {
+      console.error(error);
+      return;
+    }
   }
 }

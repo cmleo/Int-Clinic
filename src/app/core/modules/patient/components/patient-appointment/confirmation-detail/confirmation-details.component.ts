@@ -49,6 +49,7 @@ export class ConfirmationDetailComponent {
         }),
         archivedByDoctor: false,
         archivedByPatient: false,
+        status: 'scheduled',
       };
       this.appointmentService.addAppointment(appointmentConfirmed);
     }

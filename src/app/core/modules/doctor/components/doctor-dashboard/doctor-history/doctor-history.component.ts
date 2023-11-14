@@ -48,6 +48,7 @@ export class DoctorHistoryComponent {
               timeSlot: string;
               extraDetails: object;
               archivedByDoctor: boolean;
+              status: string;
             }) => {
               const appointmentDate = appointment.date.toDate();
               if (appointmentDate < this.todayDate) {
@@ -62,6 +63,7 @@ export class DoctorHistoryComponent {
                   timeSlot: '',
                   extraDetails: {},
                   archivedByDoctor: false,
+                  status: '',
                 };
 
                 this.clinicService.getClinic(appointment.clinicId).subscribe(res => (data.clinic = res['data']()));
@@ -76,6 +78,7 @@ export class DoctorHistoryComponent {
                 data.extraDetails = appointment.extraDetails;
                 data.localDate = appointment.localDate;
                 data.archivedByDoctor = appointment.archivedByDoctor;
+                data.status = appointment.status;
 
                 this.appointmentsText.push(data);
               }

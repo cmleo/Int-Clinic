@@ -3,6 +3,7 @@ import { Appointment } from 'src/app/core/interfaces/appointment.interface';
 import { AppointmentService } from 'src/app/core/services/appointment.service';
 import { DataStoreService } from 'src/app/core/services/data-store.service';
 import { DateAdapter } from '@angular/material/core';
+import { Doctor } from 'src/app/core/interfaces/doctor.interface';
 
 @Component({
   selector: 'app-choose-date',
@@ -13,14 +14,15 @@ export class ChooseDateComponent implements OnInit {
   timeSlotsTemplate: string[] = ['9:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
   selected: Date | null = new Date();
   timeSlots: string[] = [];
-  doctorId!: any;
-  timeSelected!: any;
-  dateSelected!: any;
+  doctor!: Doctor;
+  timeSelected!: string;
+  dateSelected!: string | undefined;
   @Output() hasSelection = new EventEmitter<boolean>();
 
   currentDate = new Date();
 
   appointment!: Appointment;
+  noTimeSlotsAvailableOrWeekend = false;
 
   ngOnInit(): void {
     this.dateAdapter.setLocale('en-US');
@@ -38,7 +40,7 @@ export class ChooseDateComponent implements OnInit {
   initializeDateComponent() {
     this.dataStoreService.appointmentDetails.subscribe(data => {
       this.appointment = data;
-      this.doctorId = data.doctor.id;
+      this.doctor = data.doctor;
     });
     this.onAddDate();
   }
@@ -48,8 +50,8 @@ export class ChooseDateComponent implements OnInit {
     return day !== 0 && day !== 6;
   };
 
-  isActive(item: any) {
-    return this.timeSelected === item;
+  isActive(time: string) {
+    return this.timeSelected === time;
   }
 
   onAddDate() {
@@ -65,12 +67,18 @@ export class ChooseDateComponent implements OnInit {
       year: 'numeric',
     });
 
-    this.appointmentService.queryAppointmentsByDate(this.doctorId, localDate).subscribe(data => {
+    this.appointmentService.queryAppointmentsByDate(this.doctor.uid, localDate).subscribe(data => {
       this.timeSlots = JSON.parse(JSON.stringify(this.timeSlotsTemplate));
       data.forEach(appointment => {
         const index = this.timeSlots.indexOf(appointment['timeSlot']);
         this.timeSlots.splice(index, 1);
       });
+
+      if (this.timeSlots.length === 0 || !this.myFilter(this.selected)) {
+        this.noTimeSlotsAvailableOrWeekend = true;
+      } else {
+        this.noTimeSlotsAvailableOrWeekend = false;
+      }
     });
   }
 
