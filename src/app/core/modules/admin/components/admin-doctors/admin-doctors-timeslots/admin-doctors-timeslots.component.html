@@ -1,0 +1,26 @@
+<main class="container">
+  <div class="container__date">
+    <mat-card class="demo-inline-calendar-card">
+      <mat-calendar
+        [(selected)]="selected"
+        (click)="onClickDate()"
+        [dateFilter]="myFilter"
+        [minDate]="currentDate"
+        [startAt]="currentDate"></mat-calendar>
+    </mat-card>
+  </div>
+  <div class="container__time">
+    <h3>Sloturi disponibile</h3>
+
+    <div class="container__time__buttons">
+      <button
+        *ngFor="let slot of doctorTimeSlots"
+        [ngClass]="{ active: isActive(slot) }"
+        class="container__time__buttons__btn"
+        (click)="onSelectTimeSlot(slot)"
+        mat-stroked-button>
+        {{ slot }}
+      </button>
+    </div>
+  </div>
+</main>
