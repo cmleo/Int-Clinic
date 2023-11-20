@@ -29,6 +29,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AdminFilterComponent } from './components/admin-filter/admin-filter.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
+import { AdminDoctorsTimeslotsComponent } from './components/admin-doctors/admin-doctors-timeslots/admin-doctors-timeslots.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 const COMPONENTS = [AdminComponent];
 
@@ -44,6 +47,7 @@ const COMPONENTS = [AdminComponent];
     AdminClinicsComponent,
     AdminClinicsFormComponent,
     AdminFilterComponent,
+    AdminDoctorsTimeslotsComponent,
   ],
   imports: [
     CommonModule,
@@ -64,6 +68,8 @@ const COMPONENTS = [AdminComponent];
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [SpecialtiesService, ServicesService],
 })

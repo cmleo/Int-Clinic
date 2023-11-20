@@ -65,11 +65,11 @@
               {{ doctor?.description }}
             </div>
             <div class="table__expanded__element__edit-delete">
+              <button mat-stroked-button color="secondary" [routerLink]="doctor?.id + '/time-slots'">TimeSlots</button>
               <button mat-stroked-button color="primary" [routerLink]="doctor?.id + '/edit'">Editează</button>
               <button
                 mat-stroked-button
                 color="warn"
-                id="delete-button"
                 (click)="confirmDeleteDialog(doctor?.id, doctor.lastName + ' ' + doctor.firstName)">
                 Șterge
               </button>

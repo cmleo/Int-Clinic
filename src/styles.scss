@@ -136,9 +136,8 @@ body::-webkit-scrollbar {
       }
 
       &__edit-delete {
-        #delete-button {
-          margin-left: 10px;
-        }
+        display: flex;
+        gap: 0.5rem;
       }
     }
 

@@ -9,6 +9,7 @@ import { AdminServicesComponent } from './components/admin-services/admin-servic
 import { AdminServicesFormComponent } from './components/admin-services/admin-services-form/admin-services-form.component';
 import { AdminDoctorsFormComponent } from './components/admin-doctors/admin-doctors-form/admin-doctors-form.component';
 import { AdminClinicsFormComponent } from './components/admin-clinics/admin-clinics-form/admin-clinics-form.component';
+import { AdminDoctorsTimeslotsComponent } from './components/admin-doctors/admin-doctors-timeslots/admin-doctors-timeslots.component';
 
 const ROUTES: Routes = [
   {
@@ -62,6 +63,10 @@ const ROUTES: Routes = [
       {
         path: 'doctors/:id/edit',
         component: AdminDoctorsFormComponent,
+      },
+      {
+        path: 'doctors/:id/time-slots',
+        component: AdminDoctorsTimeslotsComponent,
       },
     ],
   },
