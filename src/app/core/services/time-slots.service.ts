@@ -7,7 +7,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class TimeSlotsService {
   constructor(private firestore: AngularFirestore) {}
 
-  addTimeSlots(doctorId: string, date: string | undefined, availableSlots: string[]) {
+  addTimeSlots(doctorId: string | undefined, date: string | undefined, availableSlots: string[]) {
     const doctorRef = this.firestore.collection('doctors').doc(doctorId);
     const timeSlotsRef = doctorRef.collection('timeSlots').doc(date);
 
