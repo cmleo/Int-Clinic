@@ -7,11 +7,18 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class TimeSlotsService {
   constructor(private firestore: AngularFirestore) {}
 
-  addTimeSlots(doctorId: string | undefined, date: string | undefined, availableSlots: string[]) {
+  postTimeSlots(doctorId: string | undefined, date: string | undefined, availableSlots: string[]) {
     const doctorRef = this.firestore.collection('doctors').doc(doctorId);
     const timeSlotsRef = doctorRef.collection('timeSlots').doc(date);
 
     return timeSlotsRef.set({ availableSlots });
+  }
+
+  updateTimeSlots(doctorId: string | undefined, date: string | undefined, slots: string[]) {
+    const doctorRef = this.firestore.collection('doctors').doc(doctorId);
+    const timeSlotsRef = doctorRef.collection('timeSlots').doc(date);
+
+    return timeSlotsRef.update({ availableSlots: slots });
   }
 
   getTimeSlots(doctorId: string | undefined, date: string | undefined) {
@@ -19,13 +26,6 @@ export class TimeSlotsService {
     const timeSlotsRef = doctorRef.collection('timeSlots').doc(date);
 
     return timeSlotsRef.get();
-  }
-
-  updateTimeSlots(doctorId: string, date: string | undefined, availableSlots: string[]) {
-    const doctorRef = this.firestore.collection('doctors').doc(doctorId);
-    const timeSlotsRef = doctorRef.collection('timeSlots').doc(date);
-
-    return timeSlotsRef.update({ availableSlots });
   }
 
   deleteTimeSlots(doctorId: string, date: string | undefined) {
