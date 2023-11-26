@@ -10,7 +10,6 @@ import { Patient } from '../interfaces/patient.interface';
 import { Router } from '@angular/router';
 import { initializeApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment';
-import { TimeSlotsService } from './time-slots.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,16 +22,13 @@ export class AuthService {
     year: 'numeric',
   });
 
-  defaultTimeSlots: string[] = ['9:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-
   secondaryApp = initializeApp(environment.firebase, 'SecondaryApp');
   secondaryAppAuth = getAuth(this.secondaryApp);
 
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    public router: Router,
-    private timeSlotsService: TimeSlotsService
+    public router: Router
   ) {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -136,8 +132,6 @@ export class AuthService {
           specialtyIds: doctor.specialtyIds,
           role: 'doctor',
         };
-
-        this.timeSlotsService.addTimeSlots(result.user.uid, this.todayLocaleDate, this.defaultTimeSlots);
 
         return userRef.set(doctorData, {
           merge: true,
