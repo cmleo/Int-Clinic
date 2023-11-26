@@ -1,31 +1,43 @@
 .container {
-    p {
-      text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  p {
+    text-align: center;
+  }
+  &__date {
+    display: flex;
+    justify-content: center;
+    margin-right: 20px;
+    .demo-inline-calendar-card {
+      width: 300px;
+      height: fit-content;
     }
-    &__date {
-      display: flex;
-      justify-content: center;
-      .demo-inline-calendar-card {
-        width: 300px;
+  }
+
+  &__time {
+    background-color: rgb(235, 250, 241);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+
+    &__buttons {
+      padding: 15px;
+      &__btn {
+        margin: 10px;
+        background-color: white;
       }
     }
 
-    &__time {
-        background-color: rgb(235, 250, 241);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        &__buttons {
-            padding: 15px;
-            &__btn {
-              margin: 10px;
-              background-color: white;
-            }
-          }
+    &__addBtn {
+      background-color: rgb(0, 153, 0);
+      color: white;
+      border-radius: 5px;
     }
+  }
 }
 
 .active {
-    background-color: lightblue;
+  background-color: lightblue;
 }

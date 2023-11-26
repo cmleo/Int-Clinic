@@ -1,26 +1,44 @@
 <main class="container">
   <div class="container__date">
     <mat-card class="demo-inline-calendar-card">
-      <mat-calendar
-        [(selected)]="selected"
-        (click)="onClickDate()"
-        [dateFilter]="myFilter"
-        [minDate]="currentDate"
+      <mat-calendar [(selected)]="selected" (click)="onClickDate()" [dateFilter]="myFilter"
         [startAt]="currentDate"></mat-calendar>
     </mat-card>
   </div>
+  <span *ngIf="doctorTimeSlots && doctorTimeSlots.length > 0; then slotsTrue; else slotsFalse"></span>
   <div class="container__time">
-    <h3>Sloturi disponibile</h3>
+    <ng-template #slotsTrue>
+      <h3>Sloturile doctorului</h3>
+
+      <div class="container__time__buttons">
+        <span *ngFor="let slot of doctorTimeSlots">
+          <button mat-stroked-button [ngClass]="{ active: isActive(slot) }" class="container__time__buttons__btn"
+            (click)="onSelectDoctorTimeSlot(slot)">
+            {{ slot }}
+          </button>
+          <br />
+        </span>
+        <button mat-stroked-button color="warn" (click)="onDeleteTimeSlots()">Elimina</button>
+      </div>
+    </ng-template>
+
+    <ng-template #slotsFalse>
+      <h3>Niciun slot asignat acestei zile</h3>
+    </ng-template>
+  </div>
+
+  <div class="container__time" *ngIf="addableTimeSlots.length > 0">
+    <h3>Sloturi pe care le poti adauga</h3>
 
     <div class="container__time__buttons">
-      <button
-        *ngFor="let slot of doctorTimeSlots"
-        [ngClass]="{ active: isActive(slot) }"
-        class="container__time__buttons__btn"
-        (click)="onSelectTimeSlot(slot)"
-        mat-stroked-button>
+      <button mat-stroked-button *ngFor="let slot of addableTimeSlots" [ngClass]="{ active: isSelected(slot) }"
+        class="container__time__buttons__btn" (click)="onSelectAddableTimeSlot(slot)">
         {{ slot }}
       </button>
+    </div>
+
+    <div class="container__time__addBtn">
+      <button mat-stroked-button color="secondary" (click)="onAddTimeSlots()">Adauga</button>
     </div>
   </div>
 </main>
