@@ -24,6 +24,19 @@
 
     &__buttons {
       padding: 15px;
+
+      #deleteSlots {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        gap: 20%;
+
+        #cleanupBtn {
+          color: white;
+          background-color: red;
+          padding: 20px;
+        }
+      }
       &__btn {
         margin: 10px;
         background-color: white;

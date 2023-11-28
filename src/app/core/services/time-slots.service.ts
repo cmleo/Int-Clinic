@@ -34,4 +34,21 @@ export class TimeSlotsService {
 
     return timeSlotsRef.delete();
   }
+
+  cleanupPastTimeSlots(doctorId: string, currentDate: string): void {
+    this.firestore
+      .collection('doctors')
+      .doc(doctorId)
+      .collection('timeSlots')
+      .get()
+      .subscribe(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const timeSlotDate = doc.id;
+
+          if (new Date(timeSlotDate) < new Date(currentDate)) {
+            this.deleteTimeSlots(doctorId, timeSlotDate);
+          }
+        });
+      });
+  }
 }

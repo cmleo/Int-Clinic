@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationDialogService } from 'src/app/core/services/confirmation-dialog.service';
 import { TimeSlotsService } from 'src/app/core/services/time-slots.service';
 
 @Component({
@@ -10,7 +11,8 @@ import { TimeSlotsService } from 'src/app/core/services/time-slots.service';
 export class AdminDoctorsTimeslotsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private timeSlotsService: TimeSlotsService
+    private timeSlotsService: TimeSlotsService,
+    private dialogService: ConfirmationDialogService
   ) {}
 
   currentLocalDate = this.formatDate(new Date());
@@ -149,5 +151,43 @@ export class AdminDoctorsTimeslotsComponent implements OnInit {
     if (this.doctorTimeSlots.length === 0) {
       this.timeSlotsService.deleteTimeSlots(this.doctorId, this.localDateSelected || this.currentLocalDate);
     }
+  }
+
+  onConfirmDeleteTimeSlots() {
+    const options = {
+      title: 'Ștergere Sloturi',
+      message: `Ești sigur că vrei să ștergi sloturile selectate ?`,
+      cancelText: 'Nu',
+      confirmText: 'Da',
+    };
+
+    if (this.doctorSlotsSelected.length === 0) {
+      return;
+    }
+
+    this.dialogService.open(options);
+
+    this.dialogService.confirmed().subscribe(confirmed => {
+      if (confirmed) {
+        this.onDeleteTimeSlots();
+      }
+    });
+  }
+
+  onCleanupPastTimeSlots() {
+    const options = {
+      title: 'Stergere Istoric Sloturi',
+      message: `Ești sigur că vrei să ștergi toate sloturile din istoricul doctorului ?`,
+      cancelText: 'Nu',
+      confirmText: 'Da',
+    };
+
+    this.dialogService.open(options);
+
+    this.dialogService.confirmed().subscribe(confirmed => {
+      if (confirmed) {
+        this.timeSlotsService.cleanupPastTimeSlots(this.doctorId, this.currentLocalDate);
+      }
+    });
   }
 }
