@@ -90,6 +90,7 @@ export class PatientAppointmentComponent implements AfterViewInit {
 
   postAppointment() {
     this.confirmationComponent.onPostAppointment();
+    this.dateComponent.addSelectedTimeSlot();
   }
 
   submitDetailsForm() {

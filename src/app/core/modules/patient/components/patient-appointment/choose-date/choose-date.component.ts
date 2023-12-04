@@ -4,6 +4,7 @@ import { AppointmentService } from 'src/app/core/services/appointment.service';
 import { DataStoreService } from 'src/app/core/services/data-store.service';
 import { DateAdapter } from '@angular/material/core';
 import { Doctor } from 'src/app/core/interfaces/doctor.interface';
+import { TimeSlotsService } from 'src/app/core/services/time-slots.service';
 
 @Component({
   selector: 'app-choose-date',
@@ -11,15 +12,19 @@ import { Doctor } from 'src/app/core/interfaces/doctor.interface';
   styleUrls: ['./choose-date.component.scss'],
 })
 export class ChooseDateComponent implements OnInit {
-  timeSlotsTemplate: string[] = ['9:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-  selected: Date | null = new Date();
-  timeSlots: string[] = [];
-  doctor!: Doctor;
-  timeSelected!: string;
-  dateSelected!: string | undefined;
-  @Output() hasSelection = new EventEmitter<boolean>();
-
   currentDate = new Date();
+  currentLocaleDate = this.formatDate(this.currentDate);
+  dateSelected: Date | null = new Date();
+  localeDateSelected: string | undefined = this.dateSelected?.toLocaleDateString('ro-Ro', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+
+  doctor!: Doctor;
+  doctorTimeSlots: string[] = [];
+  timeSelected!: string;
+  @Output() hasSelection = new EventEmitter<boolean>();
 
   appointment!: Appointment;
   noTimeSlotsAvailableOrWeekend = false;
@@ -34,7 +39,8 @@ export class ChooseDateComponent implements OnInit {
   constructor(
     private dataStoreService: DataStoreService,
     private appointmentService: AppointmentService,
-    private dateAdapter: DateAdapter<Date>
+    private dateAdapter: DateAdapter<Date>,
+    private timeSlotsService: TimeSlotsService
   ) {}
 
   initializeDateComponent() {
@@ -42,7 +48,7 @@ export class ChooseDateComponent implements OnInit {
       this.appointment = data;
       this.doctor = data.doctor;
     });
-    this.onAddDate();
+    this.onSelectDate();
   }
 
   myFilter = (d: Date | null): boolean => {
@@ -54,38 +60,53 @@ export class ChooseDateComponent implements OnInit {
     return this.timeSelected === time;
   }
 
-  onAddDate() {
-    this.timeSelected = '';
-    this.dateSelected = this.selected
-      ?.toString()
-      .slice(4)
-      .substring(11, this.timeSelected.length - 1);
-
-    const localDate = this.selected?.toLocaleDateString('ro-Ro', {
+  private formatDate(date: Date): string {
+    return date.toLocaleDateString('ro-Ro', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
     });
-
-    this.appointmentService.queryAppointmentsByDate(this.doctor.uid, localDate).subscribe(data => {
-      this.timeSlots = JSON.parse(JSON.stringify(this.timeSlotsTemplate));
-      data.forEach(appointment => {
-        const index = this.timeSlots.indexOf(appointment['timeSlot']);
-        this.timeSlots.splice(index, 1);
-      });
-
-      if (this.timeSlots.length === 0 || !this.myFilter(this.selected)) {
-        this.noTimeSlotsAvailableOrWeekend = true;
-      } else {
-        this.noTimeSlotsAvailableOrWeekend = false;
-      }
-    });
   }
 
-  onAddTime(time: string) {
+  onSelectDate() {
+    this.timeSelected = '';
+
+    if (this.localeDateSelected === this.currentLocaleDate) {
+      this.timeSlotsService.getTimeSlots(this.doctor.id, this.currentLocaleDate).subscribe(slots => {
+        this.handleTimeSlots(slots);
+      });
+    } else {
+      this.timeSlotsService.getTimeSlots(this.doctor.id, this.localeDateSelected).subscribe(slots => {
+        return this.handleTimeSlots(slots);
+      });
+    }
+  }
+
+  private handleTimeSlots(timeSlots: any) {
+    this.doctorTimeSlots = timeSlots.data()?.['availableSlots'].sort() || [];
+
+    if (this.doctorTimeSlots.length === 0 || !this.myFilter(this.dateSelected)) {
+      this.noTimeSlotsAvailableOrWeekend = true;
+    } else {
+      this.noTimeSlotsAvailableOrWeekend = false;
+    }
+  }
+
+  onSelectTimeSlot(time: string) {
     this.hasSelection.emit(false);
     this.timeSelected = time;
-    const data = { ...this.appointment, timeSlot: this.timeSelected, date: this.selected };
+
+    const data = { ...this.appointment, timeSlot: this.timeSelected, date: this.dateSelected };
     this.dataStoreService.addData(data);
+  }
+
+  addSelectedTimeSlot() {
+    const updatedTimeSlots = this.doctorTimeSlots.filter(slot => slot !== this.timeSelected);
+
+    this.timeSlotsService.updateTimeSlots(
+      this.doctor.id,
+      this.localeDateSelected || this.currentLocaleDate,
+      updatedTimeSlots
+    );
   }
 }
