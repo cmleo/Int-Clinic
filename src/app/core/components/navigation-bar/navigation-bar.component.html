@@ -1,7 +1,7 @@
 <mat-toolbar>
   <ul>
     <li><a routerLink="" routerLinkActive="activeNav" [routerLinkActiveOptions]="{ exact: true }">Acasă</a></li>
-    <li *ngIf="isAdmin"><a routerLink="admin" routerLinkActive="activeNav">Admin</a></li>
+    <li *ngIf="isAdmin"><a routerLink="admin/clinics" routerLinkActive="activeNav">Admin</a></li>
     <li *ngIf="!loggedUser || isPatient">
       <a routerLink="patient/dashboard/current" routerLinkActive="activeNav">Pacient</a>
     </li>
@@ -38,12 +38,9 @@
       </button>
 
       <mat-menu #menu2="matMenu">
-        <a
-          *ngIf="!isAdmin"
-          [routerLink]="
+        <a *ngIf="!isAdmin" [routerLink]="
             isPatient ? 'patient/dashboard/current' : isDoctor ? 'doctor/dashboard/current' : 'admin/clinics'
-          "
-          mat-menu-item>
+          " mat-menu-item>
           <mat-icon class="login-icon">account_circle </mat-icon>
           Contul meu
         </a>
